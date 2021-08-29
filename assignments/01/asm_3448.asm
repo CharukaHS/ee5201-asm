@@ -38,12 +38,8 @@ section .data
   s_msgsub equ $-msgsub
 
   ; subtraction result
-  msgsubres db "Subtraction of variables is ", 0x0
+  msgsubres db "Magnitude of variable subtraction is ", 0x0
   s_msgsubres equ $-msgsubres
-
-  ; negative sign of subtraction result
-  msgsubneg db "-", 0x0
-  s_msgsubneg equ $-msgsubneg
 
   ; character request
   msgchar db "Enter a character ", 0x0
@@ -204,7 +200,6 @@ subtraction:
   ; so, to avoid negative values in subtraction always subtract from the highest value
   ; from var1 and var2, highest value should move to "highest" variable
   ; when (var1 < var2), ch registry updates to 1, other times its 0
-  ; so in the end when the result is printed, a '-' character is printed according to ch registry value
   ; must be an inefficient method. but ...
 
   cmp rax, [var2]
@@ -213,7 +208,6 @@ subtraction:
   ; assign highest and lowest
   mov [highest], rax
   mov [lowest], rbx
-  mov ch, 0 ; ch == 0 means subtraction is positive
 
 sub_loop:
   mov al, [highest+rsi] ; al = highest[rsi]
@@ -239,10 +233,6 @@ sub_save:
   ; printing results
   print msgsubres, s_msgsubres
 
-  ; check for negative flag, print '-' if negative
-  cmp ch, 0
-  jg print msgsubneg, s_msgsubneg
-
   print temp, 0x4
   print ln, 1
 
@@ -256,7 +246,6 @@ sub_overflow:
 sub_swap:
   mov [highest], rbx
   mov [lowest], rax
-  mov ch, 1 ; ch == 1 means subtraction is negative
   jmp sub_loop
 
 prompt_char:
