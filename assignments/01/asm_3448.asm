@@ -9,6 +9,10 @@ section .data
   ; new line
   ln db 0xA, 0x0
 
+  ; greeting message
+  msggreet db "Hello :D ", 0x0, 0xA
+  s_msggreet equ $-msggreet
+
   ; index message
   msgvar1 db "Your index number is ", 0x0
   s_msgvar1 equ $-msgvar1
@@ -94,6 +98,8 @@ reverse:
   cmp rsi, 0x4  ; rsi == 4 means, all digits are reversed
   jl reverse  ; loop
 
+print_greetings:
+  print msggreet, s_msggreet
 
 printing_reversing_results:
   ; print index
